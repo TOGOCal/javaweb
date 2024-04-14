@@ -1,0 +1,98 @@
+show databases;
+
+drop database if EXISTS bd5;
+
+create database if not EXISTS db5;
+
+use db5;
+
+drop table if EXISTS 员工表;
+drop table if EXISTS 部门表;
+drop table if EXISTS 职务表;
+drop table if EXISTS 工资等级表;
+
+
+create table if not EXISTS 部门表(
+
+	id int primary key, 
+	name varchar(50),
+	location varchar(50)
+);
+
+create table if not EXISTS 职务表(
+
+	id int PRIMARY key,
+	name varchar(50),
+	职务描述 varchar(50)
+);
+
+create table 员工表(
+
+	id int primary key,
+	name varchar(20),
+	职务id int,
+	上级领导id int,
+	入职日期 date,
+	salary int,
+	所在部门id int
+);
+
+-- 每个员工对应一个部门
+alter table 员工表 
+add CONSTRAINT fk_部门表 FOREIGN key 
+(所在部门id) REFERENCES 部门表(id);
+
+-- 一个员工对应一个职务
+alter table 员工表
+add CONSTRAINT fk_职务表 FOREIGN key 
+(职务id) REFERENCES 职务表(id);
+
+
+create table if not EXISTS 工资等级表(
+
+	grade int PRIMARY key,
+	最低工资 int,
+	最高工资 int
+);
+
+-- 要求1：查询所有员工信息,查询员工编号,员工姓名，工资，职务名称，职务描述
+select t1.id 员工id , t1.name 员工姓名 ,t1.salary 员工工资, t2.name 职务名称, t2.职务描述 职务描述
+from 员工表 t1,职务表 t2
+where 
+t1.id = t2.id;
+
+-- 需求2：查询员工编号，员工姓名，工资，职务名称，职务描述，部门名称，部门位置
+select 
+table1.员工编号, table1.员工姓名 , table1.工资 , table1.职务名称 , table1.职务描述, table2.name 部门名称 , table2.location 部门位置
+from 
+	(select t1.id 员工编号 ,t1.name 员工姓名 , t1.salary 工资 , t2.name 职务名称  , t2.职务描述 , t1.所在部门id 所在部门
+	from 员工表 t1, 职务表 t2 
+	where t1.id = t2.id) table1,
+部门表 table2
+where
+table1.所在部门 = table2.id;
+
+-- 需求3：查询员工姓名，工资，工资等级
+select t1.name 员工姓名, t1.salary 工资 , t2.grade 工资等级
+from 员工表 t1, 工资等级表 t2
+where 
+t1.salary >= t2.最低工资 and t1.salary <= t2.最高工资;
+ 
+-- 需求4：查询员工姓名，工资，职务名称，部门位置，工资等就
+select t1.name 员工姓名, t1.salary 工资, t2.name 职务名称, t3.name 部门信息 ,t3.location 部门位置 ,t4.grade 工资等级
+from 
+员工表 t1, 职务表 t2, 部门表 t3,工资等级表 t4
+where
+t1.职务id = t2.id and  t1.所在部门id = t3.id and t1.salary between t4.最低工资 and t4.最高工资;
+
+-- 需求5：查询部门编号，部门名称 ， 部门位置，部门人数 
+-- 单独查询部门人数
+select 所在部门id ,count(*) 人数 from 员工表 group by 所在部门id;
+-- 这个的结果可以作为另一张表
+
+select t2.id 部门编号, t2.name 部门名称 ,t2.location 部门位置, t1.人数 部门人数 
+from 
+(select 所在部门id ,count(*) 人数 from 员工表 group by 所在部门id) t1 ,部门表 t2 
+where 
+t1.所在部门id = t2.id;
+

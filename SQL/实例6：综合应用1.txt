@@ -1,0 +1,72 @@
+-- 数据库设计实例
+
+-- 音乐方面数据库设计
+/*
+专辑 一个专辑拥有多个曲目
+曲目 一个曲目属于一个专辑
+短评 一个曲目对应多个短评
+用户 一个用户对应多个短评（可能），一个短评对应一个用户
+*/
+
+
+show DATABASES;
+
+drop database if EXISTS db4;
+
+create database if not EXISTS db4;
+
+use db4;
+
+create table if not EXISTS 专辑(
+
+	id int PRIMARY key auto_increment,
+	name varchar(20)
+);
+
+create table if not EXISTS 曲目(
+
+	id int PRIMARY key auto_increment,
+	name varchar(20),
+	所属专辑id int
+);
+
+create table if not EXISTS 短评(
+
+	id int PRIMARY key auto_increment,
+	用户 int,
+	内容 varchar(100),
+	所属曲目id int,
+	所属用户id int
+);
+
+create table if not EXISTS 用户(
+
+	id int PRIMARY key auto_increment,
+	name varchar(20)
+);
+
+select * from 曲目;
+
+
+-- 欸，我发现这种外键是对该表做约束的键，所以类似与指针的话应该是向上指的指针
+-- 需要实现的功能：
+-- 1.一个专辑拥有多个曲目
+alter table 曲目 add CONSTRAINT fk_专辑 FOREIGN key (所属专辑id) references 专辑(id);
+-- 2.一个曲目拥有多个短评
+alter table 短评 add CONSTRAINT fk_曲目 FOREIGN key (所属曲目id) references 曲目(id);
+-- 3.一个用户对应多个短评，但一个短评只能属于一个用户
+alter table 短评 add CONSTRAINT fk_用户 FOREIGN key (所属用户id) references 用户(id);
+-- 4.一个用户可以收藏多个专辑，每个专辑也可以被多个用户收集
+-- 需要构建中间表
+create table if not EXISTS 用户_专辑表 (
+
+	id int PRIMARY key,
+	用户id int,
+	
+	CONSTRAINT fk_用户表 FOREIGN key (用户id) REFERENCES 用户(id),
+	
+	专辑id int,
+	CONSTRAINT fk_专辑表 FOREIGN key (专辑id) REFERENCES 专辑(id)
+);
+
+

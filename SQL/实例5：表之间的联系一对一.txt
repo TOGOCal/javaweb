@@ -1,0 +1,42 @@
+show databases;
+
+drop database db3;
+
+create DATABASE db3;
+
+use db3;
+
+-- 实现两表数据多对多的查询
+-- 为什么要实现一对一而不直接放在一张表里面
+-- 例如在建立用户信息表时，可以将一个对象中经常使用的字段放在一张表中，不经常使用的表放在另一个表中，用于提升查询效率
+
+-- 实现方式：将任意一方加入外键，关联另一方的主键，并设置外键为唯一
+create table 用户常用信息表(
+
+	id int,
+	name varchar(20),
+	nickname varchar(20),
+	age int,
+	gender char(1),
+	_id int UNIQUE -- 将这个设置为唯一既可以保证表数据一对一 
+);
+
+create table 用户详细附加信息表(
+
+	id int PRIMARY key,
+	city varchar(20),
+	学历 char(4),
+	收入 int, 
+	so_on varchar(20) default null
+);
+
+show tables;
+
+select * from 用户常用信息表;
+
+select * from 用户详细附加信息表;
+
+
+alter table 用户常用信息表 add CONSTRAINT fk_用户详细附加信息表 FOREIGN key (_id) REFERENCES 用户详细附加信息表(id);
+
+

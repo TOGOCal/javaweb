@@ -1,0 +1,78 @@
+show databases;
+
+use db2;
+
+show tables;
+
+select * from 员工信息;
+
+select * from 学生信息;
+
+
+-- ==================================================================
+-- 删除表，需要注意的是，由于构建了外键，导致部门信息表是主表
+-- 不能在员工表还存在的时候删除部门信息表
+
+drop table if EXISTS 员工信息表;
+drop table if EXISTS 部门信息表;
+
+
+
+-- ==================================================================
+
+
+create table if not EXISTS 部门信息表(
+
+	id int primary key auto_increment,
+	name varchar(20) not null unique,
+	address varchar(10) DEFAULT '未知'
+);
+
+
+
+insert into 部门信息表(id ,name,address)
+VALUES
+(1, '研发部门' , '广州'),
+(2, '销售部门' , '深圳');
+
+
+-- 要想触发非空指令是需要在输入格式欸对时候就不写哪一项才可以
+insert into 部门信息表(id,name)
+VALUES
+(3,'网安部门');
+
+select * from 部门信息表;
+
+-- ===============================================================================
+
+
+
+create table if not EXISTS 员工信息表 (
+
+	id int not null PRIMARY key auto_increment,
+	name VARCHAR(20),
+	age int,
+	所在部门id int,
+	CONSTRAINT fk_员工信息表_部门信息表 FOREIGN key (所在部门id) REFERENCES 部门信息表(id)
+	-- 如果要创建外键，则代表要先创建部门信息表(主表)
+);
+
+insert into 员工信息表(id,name,age,所在部门id)
+values
+(1,'张三',20,1),
+(2,'李四',21,1),
+(3,'王五',19,1),
+(4,'赵六',20,2),
+(5,'孙七',22,2),
+(6,'周八',18,2);
+
+select * from 员工信息表;
+
+-- 删除外键
+ alter table 员工信息表 drop FOREIGN key fk_员工信息表_部门信息表;
+ 
+ /*
+ 外键作用：
+ 1.不能在外键存在的时候删除主表
+ 2.比如从表中存在信息关联在主表的某个信息上，不能删除主表中的那个信息
+ */

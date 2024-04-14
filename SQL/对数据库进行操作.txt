@@ -1,0 +1,18 @@
+show databases;
+-- 显示mySQL中有多少个数据库，分别是什么
+
+create database if not exists 数据库名;
+-- 创建一个叫该数据库名称的数据库（如果不存在）
+-- ，判断条件可以不写(不写 if not exists)
+
+drop database if exists 数据库名;
+-- 删除一个叫该数据库名称的数据库（如果存在）
+-- ，判断条件同理
+
+use 数据库名;
+-- 开始使用该数据库
+-- 相当于windows中的双击进入文件夹
+
+select database();
+-- 查看当前使用的是哪个数据库
+

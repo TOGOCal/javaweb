@@ -1,0 +1,56 @@
+show databases;
+
+-- 表关系之多对多
+-- 有这种关系的数据类型：商品和订单，
+-- 一个商品可以存在于多个订单中
+-- 一个订单可以包含多个商品
+
+create DATABASE if not EXISTS db3;
+-- 
+
+use db3;
+
+create table if not EXISTS 订单表(
+
+	id int primary key,-- 主键约束
+	paytment double(10,2) not null,
+	pay_method varchar(30) DEFAULT '未选择',-- 支付方式
+	status char(3) DEFAULT '未付款'
+);
+
+
+create table if not EXISTS 商品表(
+
+	id int primary key,-- 主键约束
+	name varchar(50) not null,
+	price double(10,2) not null
+);
+
+-- 要想实现多对多的关系，需要使用第三张中间表
+-- 中间表至少关联两个外键，分别关联两方 主键
+
+-- 以下构建中间表
+create table if not EXISTS 商品_订单_中间表(
+
+	id int,
+	订单id int,
+	商品id int,
+	购买数量 int
+);
+
+show tables;
+
+select * from 商品表;
+select * from 订单表;
+select * from 商品_订单_中间表;
+
+alter table 商品_订单_中间表 add CONSTRAINT fk_订单id FOREIGN key (订单id) REFERENCES 订单表(id); 
+
+alter table 商品_订单_中间表 add CONSTRAINT fk_商品id FOREIGN key (商品id) REFERENCES 商品表(id);
+-- 修改 商品_订单_中间表中  在其中加入一个叫做 fk_id的外键  关联此表中的 商品id 到 商品表中的 id这一个信息
+
+drop table if EXISTS 商品表;
+drop table if EXISTS 订单表;
+drop table if EXISTS 商品_订单_中间表;
+
+

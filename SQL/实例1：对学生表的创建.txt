@@ -1,0 +1,61 @@
+
+create database if not EXISTS db2;-- 创建一个数据库
+
+use db2;-- 进入数据库db2
+
+drop table if exists 学生信息;
+
+create table 学生信息(
+
+	id int,
+	name varchar(10),
+	gender char(1),
+	birthday date,
+	score double(5,2),-- 总共显示5个数字，显示小数点后两位
+	email varchar(64),
+	tel varchar(15),
+	status tinyint
+);-- 数据名在前，数据类型在后
+
+select * from 学生信息;-- 查看表中信息
+
+insert into 学生信息(id,name) 
+values
+ (1,'张三');-- 在id行和姓名行及加入一个id是1的张三
+-- SQL中单引号双引号都可以表示引用字符串（难道是SQL不区分大小写的原因？
+
+insert into 学生信息(id,name,gender,birthday,score,email,tel,status)
+values
+ (2,'李四','男','2005-01-25',88.12,'List@李四.cn','15208399728',1);
+ -- 这种方式虽然麻烦，但是可以很容易将加入的数据与对应的表头相对应
+ 
+insert into 学生信息
+values
+ (3,'王五','男','2000-02-29',100,'List@王五.cn','15218399728',2);
+ -- 如果确定是对全表作修改可以不写相对应的表头
+ 
+ insert into 学生信息
+ values
+ (4,'赵六','男','1949-01-20',98,'List@赵六.cn','15318399728',1),
+ (4,'赵六','男','1949-01-20',98,'List@赵六.cn','15318399728',3),
+ (4,'赵六','男','1949-01-20',98,'List@赵六.cn','15318399728',2);
+ -- 可以通过这种方式同时添加多行数据
+ 
+ select * from 学生信息;
+ 
+update 学生信息
+set
+ gender = '女',score =100 where name = '张三';
+ -- 修改张三的信息
+ 
+update 学生信息
+set
+ status = 1;
+-- 表中所有记录改成对应的信息
+
+delete from 学生信息
+where name = '张三';
+-- 删除张三这条记录
+ 
+select * from 学生信息; 
+ 
