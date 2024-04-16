@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>欸嘿</title>
+</head>
+<body>
+
+<form action="#" method="post">
+
+    <input type="hidden" name="id" value="1">
+    <!--hidden的用法是，当对用户对资料进行更新时，其对应的id其实被偷偷上传了-->
+
+    <label for="username">用户名：</label> <input type="text" name="username" id="username"><br>
+    <label for="password">密码：</label><input type="password" name="password" id="password"><br>
+
+    性别：
+    <input type="radio" name="gender" value="1" id="gender1">
+    <label for="gender1">男</label>
+
+    <input type="radio" name="gender" value="2" id="gender2">
+    <label for="gender2">女</label>
+
+    <input type="radio" name="gender" value="3" id="gender3">
+    <label for="gender3">保密</label>
+    <!--如果不加value，所有的但选项返回的都是on，就不对-->
+    <!--加上value后，提交的就是value的值-->
+<br>
+    城市:
+    <select name="city">
+        <option></option>
+        <option value="1">北京</option>
+        <option value="2">上海</option>
+        <option value="3">广州</option>
+        <option value="4">成都</option>
+
+    </select>
+
+<br>
+    座右铭：
+    <textarea cols="20" rows="2"></textarea>
+
+<br>
+
+    标签:
+    <input type="checkbox" name="tab" value="1" id="tab1">
+    <label for="tab1">编程类</label>
+    <input type="checkbox" name="tab" value="2" id="tab2">
+    <label for="tab2">画画类</label>
+    <input type="checkbox" name="tab" value="3" id="tab3">
+    <label for="tab3">音乐类</label>
+
+<br>
+<br>
+
+    <!--相当于每个input定义了一种符号-->
+    个人简介:
+    <input type="file" name="selfIntroduction">
+
+<br>
+    头像:
+    <input type="file" name="headshot">
+<br>
+
+
+    <br>
+    <input type="submit" value="快点这里"><br>
+
+    <input type="reset" value="重写"><br><br>
+
+    <input type="button" value="你猜猜点这个有没有用">
+
+
+
+</form>
+
+</body>
+</html>
